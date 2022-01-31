@@ -39,7 +39,7 @@ def DownloadDepencies(PackageList):
     # If Packages Is Empty, Means All Packages Are Already Downloaded
     if not Packages: return 'Requirements Already Satisfied'
         
-    NotRequired = PackageList - Packages
+    NotRequired = [Package for Package in PackageList if Package not in Packages]
     if NotRequired:
         for Package in NotRequired:
             print('Installing', Package, 'Failed')

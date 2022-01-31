@@ -34,15 +34,19 @@ def ShouldInstallPackage(Package):
 # Main Function To Download All Of The Packages
 def DownloadDepencies(PackageList):
     
+    Packages = [Package for Package in PackageList if ShouldInstallPackage(Package)]
+        
+    # If Packages Is Empty, Means All Packages Are Already Downloaded
+    if not Packages: return 'Requirements Already Satisfied'
+        
+    NotRequired = PackageList - Packages
+    if NotRequired:
+        for Package in NotRequired:
+            print('Installing', Package, 'Failed')
     try:
-        Packages = [Package for Package in PackageList if ShouldInstallPackage(Package)]
-        
-        # If Packages Is Empty, Means All Packages Are Already Downloaded
-        if not Packages: return 'Requirements Already Satisfied'
-        
         subprocess.check_call([sys.executable, "-m", "pip", "install", *Packages])
         
-        return 'Successfully Installed All Packages'
+        return 'Successfully Installed Packages'
     
     except Exception as Error:
         print("Something Went Wrong")
